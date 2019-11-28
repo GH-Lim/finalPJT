@@ -69,9 +69,7 @@ export default {
     },
     likeMovieAdder() {
       for (var movie of this.moviesThirty) {
-        console.log(movie)
         if (movie.check) {
-          console.log(movie.check)
           this.likeMovie.push(movie.id)
         }
       }
@@ -106,7 +104,7 @@ export default {
       };
       const SERVER_IP = process.env.VUE_APP_SERVER_IP;
       axios
-        .get(`${SERVER_IP}/api/v1/search/`, {
+        .get(`${SERVER_IP}/api/v1/search/`,this.options , {
           params: {
             keyword: ""
           }
@@ -132,10 +130,10 @@ export default {
     },
     checkSurvey() {
       const SERVER_IP = process.env.VUE_APP_SERVER_IP;
+      const headers = this.options
       axios
-        .get(`${SERVER_IP}/api/v1/userdetaildb/${this.userId}`)
+        .get(`${SERVER_IP}/api/v1/userdetaildb/${this.userId}`, headers)
         .then(response => {
-          console.log(response.data.survey);
           this.isSurvey = !response.data.survey;
         })
         .catch(error => {
