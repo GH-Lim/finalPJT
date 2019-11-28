@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" variant="faded" type="light" id="nav" sticky>
-      <b-navbar-brand v-if="isLoggedIn" href="/home">ㅇㅎㅊㅊ</b-navbar-brand>
-      <b-navbar-brand v-else href="/">ㅇㅎㅊㅊ</b-navbar-brand>
+    <b-navbar toggleable="lg" variant="dark" type="dark" id="nav" sticky>
+      <b-navbar-brand v-if="isLoggedIn" href="/home">ㅇ ㅊ<br>ㅎ ㅊ</b-navbar-brand>
+      <b-navbar-brand v-else href="/">ㅇ ㅊ<br>ㅎ ㅊ</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -151,10 +151,12 @@ export default {
   },
   // 최상위 App 컴퍼넌트가 렌더링 되면 실행하는 함수
   mounted() {
-    setInterval(() => this.title = 'ㅇㅎㅊㅊ')
     if (this.$session.has("jwt")) {
       const token = this.$session.get("jwt");
       this.$store.dispatch("login", token);
+    }
+    if (!this.isLoggedIn) {
+      localStorage.removeItem('token')
     }
   },
   methods: {
@@ -207,7 +209,7 @@ export default {
 </script>
 
 <style>
-body {
+html {
   font-family: 'Raleway', sans-serif;
 }
 </style>

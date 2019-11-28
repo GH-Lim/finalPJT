@@ -36,4 +36,5 @@ urlpatterns = [
     # 설문 조사 데이터 전송
     path('survey/', views.survey),
 
+    path('like/<int:movie_pk>/', views.like),
 ]

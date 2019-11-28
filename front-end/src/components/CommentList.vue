@@ -7,7 +7,7 @@
           :show-rating="false" :inline="true"></star-rating> {{ comment.score }} | {{comment.user.username}} : {{ comment.content }}</p>
       </div>
     </div>
-    <div v-else><h4>첫 번째 평점을 남겨보세요!</h4></div>
+    <div v-else><h5>평점이 아직 없습니다!</h5></div>
   </div>
 </template>
 

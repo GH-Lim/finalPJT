@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-img :src="bgImage" alt="" fluid />
+    <b-img :src="bgImage" alt="" fluid-grow/>
   </div>
 </template>
 
