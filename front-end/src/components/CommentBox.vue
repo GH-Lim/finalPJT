@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CommentList :movie="movie" />
+    <CommentList :movie="movie" :comments="comments"/>
     <b-button v-b-modal.cModal>평점 작성하기</b-button>
     <comment-modal id="cModal" :movie="movie" @createComment="createComment"/>
   </div>
@@ -20,6 +20,9 @@ export default {
     movie: {
       type: Object,
       required: true
+    },
+    comments: {
+      type: Array
     }
   },
   methods: {

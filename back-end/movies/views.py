@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import User, Movie, Comment, Genre, Actor, Director
-from .serializers import UserSerializer, MovieSerializer, CommentSerializer, CommentCreateSerializer, GenreSerializer, ActorSerializer, DirectorSerializer, UserDetailSerializer
+from .serializers import UserSerializer, MovieSerializer, CommentSerializer, CommentCreateSerializer, GenreSerializer, ActorSerializer, DirectorSerializer, UserDetailSerializer, UserCommentSerializer
 from rest_framework.permissions import AllowAny
 
 
@@ -37,19 +37,18 @@ def movie_detail(request, movie_pk):
 @api_view(['POST'])
 def comment_create(request, movie_pk):
     # view
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    user = get_object_or_404(User, pk=request.user.id)
     serializer = CommentCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(movie_id=movie_pk, user_id=request.user.id)
+        serializer.save(movie=movie, user=user)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def search(request):
     keyword = request.GET.get('keyword', '')
-
     movies = Movie.objects.all()
-
     if keyword:
         movies = movies.filter(title__icontains=keyword)
     serializer = MovieSerializer(many=True, instance=movies)
@@ -71,7 +70,6 @@ def comment_update_delete(request, comment_pk):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def genredb(request, genre_pk):
     genre = get_object_or_404(Genre, pk=genre_pk)
     serializer = GenreSerializer(instance=genre)
@@ -79,7 +77,6 @@ def genredb(request, genre_pk):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def actordb(request, actor_pk):
     actor = get_object_or_404(Actor, pk=actor_pk)
     serializer = ActorSerializer(instance=actor)
@@ -95,7 +92,6 @@ def directordb(request, director_pk):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def userdetaildb(request, user_pk):
     user = get_object_or_404(User, pk=user_pk)
     serializer = UserDetailSerializer(instance=user)
@@ -103,7 +99,6 @@ def userdetaildb(request, user_pk):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def userdetaildball(request):
     users = User.objects.all()
     serializer = UserDetailSerializer(many=True, instance=users)
@@ -121,7 +116,7 @@ def survey(request):
 @api_view(['GET'])
 def like(request, movie_pk):
     user = request.user
-    movie = get_object_or_404(Movie, pk=movie)
+    movie = get_object_or_404(Movie, pk=movie_pk)
     if movie.like_users.filter(pk=user.id).exists():
         user.like_movies.remove(movie)
         liked = False

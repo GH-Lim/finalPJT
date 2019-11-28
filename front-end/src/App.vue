@@ -50,6 +50,7 @@
 <script>
 import router from "@/router";
 import axios from "axios";
+import { mapGetters } from 'vuex'
 
 export default {
   name: "App",
@@ -142,6 +143,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isLoggedIn',
+      'options',
+      'userId'
+    ]),
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
     },
@@ -171,11 +177,12 @@ export default {
     },
     getMovies() {
       const SERVER_IP = process.env.VUE_APP_SERVER_IP;
+      const headers = this.options
       axios
-        .get(`${SERVER_IP}/api/v1/search/`, {
+        .get(`${SERVER_IP}/api/v1/search/`, headers, {
           params: {
             keyword: this.searchKeyword
-          }
+          },
         })
         .then(response => {
           this.byGenre = ''
@@ -189,8 +196,9 @@ export default {
     },
     searchByGenre() {
       const SERVER_IP = process.env.VUE_APP_SERVER_IP
+      const headers = this.options
       axios
-        .get(`${SERVER_IP}/api/v1/genredb/${this.genreSelect.genreSelectedOption}`)
+        .get(`${SERVER_IP}/api/v1/genredb/${this.genreSelect.genreSelectedOption}`, headers)
         .then(response => {
           this.movies = response.data.movies
           router.push("/search").catch(err => err)

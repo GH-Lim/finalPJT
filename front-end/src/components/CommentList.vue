@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div v-if="movie.comments && movie.comments.length">
-      <div v-for="(comment, i) in movie.comments" :key="i">
-        <p><star-rating :rating="comment.score/2"
+    <h4>한줄평</h4>
+    <div v-if="comments && comments.length">
+      <div v-for="(comment, i) in comments" :key="i">
+        <star-rating :rating="comment.score/2"
           :read-only="true" :increment="0.5" :star-size="15"
-          :show-rating="false" :inline="true"></star-rating> {{ comment.score }} | {{comment.user.username}} : {{ comment.content }}</p>
+          :show-rating="false" :inline="true"></star-rating>
+          <span>{{ comment.score }} | {{ comment.user["username"] }} : {{ comment.content }}</span>
       </div>
     </div>
     <div v-else><h5>평점이 아직 없습니다!</h5></div>
@@ -20,6 +22,9 @@ export default {
     movie: {
       type: Object,
       required: true
+    },
+    comments: {
+      type: Array,
     }
   },
   components: {
@@ -28,8 +33,6 @@ export default {
   data() {
     return {
     }
-  },
-  methods: {
   },
 }
 </script>
